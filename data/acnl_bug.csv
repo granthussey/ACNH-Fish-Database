@@ -1,0 +1,86 @@
+﻿BUG,,LOCATION,PRICE,ACTIVE START,ACTIVE END,January,February,March,April,May,June,July,August,September,October,November,December
+,,,,,,,,,,,,,,,,,
+Hermit Crab,,Beach,1000,7:00 PM,8:00 AM,X,X,X,X,X,x,X,X,X,X,X,X
+Wharf Roach,,Beach rocks,200,12:00 AM,11:59 PM,X,X,X,X,X,x,X,X,X,X,X,X
+Man-faced Stink Bug,,Flowers,1000,7:00 PM,8:00 AM,,,X,X,X,X,X,X,X,X,X,
+Mantis,,Flowers,430,8:00 AM,5:00 PM,,,X,X,X,X,X,X,X,X,X,
+Ladybug,,Flowers,200,8:00 AM,5:00 PM,,,X,X,X,X,,,,X,,
+Stinkbug,,Flowers,120,12:00 AM,11:59 PM,,,X,X,X,X,X,X,X,X,X,
+Peacock Butterfly,,Flowers (rare),2500,4:00 AM,7:00 PM,,,X,X,X,X,,,,,,
+Emperor Butterfly,,Flying,4000,5:00 PM,8:00 AM,X,X,X,,,X,X,X,X,,,
+Paper Kite Butterfly,,Flying,1000,8:00 AM,7:00 PM,X,X,X,X,X,x,X,X,X,X,X,X
+Tiger Butterfly,,Flying,240,4:00 AM,7:00 PM,,,X,X,X,X,X,X,X,,,
+Honeybee,,Flying,200,8:00 AM,5:00 PM,,,X,X,X,X,X,,,,,
+Common Butterfly,,Flying,160,4:00 AM,7:00 PM,X,X,X,X,X,X,,,X,X,X,X
+Yellow Butterfly,,Flying,160,4:00 AM,7:00 PM,X,X,X,X,X,X,,,X,X,X,X
+Tarantula,,Ground,8000,7:00 PM,4:00 AM,X,X,X,X,,,,,,,X,X
+Tiger Beetle,,Ground,1500,12:00 AM,11:59 PM,,X,X,X,X,X,X,X,X,X,X,
+Centipede,,Hit rocks,300,4:00 PM,11:00 PM,X,X,X,X,X,X,,,X,X,X,X
+Pill Bug,,Hit rocks,250,11:00 PM,4:00 PM,X,X,X,X,X,,,,X,X,X,X
+Moth,,Light,130,7:00 PM,4:00 AM,X,X,X,X,X,x,X,X,X,X,X,X
+Snail,,Rock (rainy),250,12:00 AM,11:59 PM,X,X,X,X,X,x,X,X,X,X,X,X
+Ant,,Rotten food,80,12:00 AM,11:59 PM,X,X,X,X,X,x,X,X,X,X,X,X
+Wasp,,Shaken tree,2500,12:00 AM,11:59 PM,X,X,X,X,X,x,X,X,X,X,X,X
+Bagworm,,Shaken tree,600,12:00 AM,11:59 PM,X,X,X,X,X,x,X,X,X,X,X,X
+Spider,,Shaken tree,480,7:00 PM,8:00 AM,X,X,X,X,X,x,X,X,X,X,X,X
+Citrus Longhorned Beetle,,Stump,350,12:00 AM,11:59 PM,X,X,X,X,X,x,X,X,X,X,X,X
+Fly,,Trash,80,12:00 AM,11:59 PM,X,X,X,X,X,x,X,X,X,X,X,X
+Mole Cricket,,Underground,500,12:00 AM,11:59 PM,X,X,X,X,X,,,,,,X,X
+Orchid Mantis,,White flower,2400,8:00 AM,5:00 PM,,,X,X,X,X,X,X,X,X,X,
+Goliath Beetle,,Tree,8000,5:00 PM,8:00 AM,,,,,,,X,X,X,,,X
+Bell Cricket,,Flowers,430,5:00 PM,8:00 AM,,,,,,,,,X,X,,
+Banded Dragonfly,,Flying,4500,8:00 AM,5:00 PM,,,,,X,X,X,X,X,X,,
+Queen Alexandra's Birdwing,,Flying,4000,8:00 AM,4:00 PM,,,,,X,X,X,X,X,,,
+Great Purple Emperor,,Flying,3000,4:00 AM,7:00 PM,,,,,X,X,X,X,,,,
+Agrias Butterfly,,Flying,3000,8:00 AM,5:00 PM,,,,X,X,X,X,X,X,,,
+Raja Brooke's Birdwing,,Flying,2500,8:00 AM,5:00 PM,X,X,,X,X,X,X,X,X,,,X
+Madagascan Sunset Moth,,Flying,2500,8:00 AM,4:00 PM,,,,X,X,X,X,X,X,,,
+Damselfly,,Flying,500,12:00 AM,11:59 PM,X,X,,,,,,,,,X,X
+Common Bluebottle,,Flying,300,4:00 AM,7:00 PM,,,,X,X,X,X,X,,,,
+Firefly,,Flying,300,7:00 PM,4:00 AM,,,,,,X,,,,,,
+Darner Dragonfly,,Flying,230,8:00 AM,5:00 PM,,,,X,X,X,X,X,X,X,,
+Red Dragonfly,,Flying,180,8:00 AM,7:00 PM,,,,,,,,,X,X,,
+Monarch Butterfly,,Flying,140,4:00 AM,5:00 PM,,,,,,,,,X,X,X,
+Mosquito,,Flying,130,5:00 PM,4:00 AM,,,,,,X,X,X,X,,,
+Scorpion,,Ground,8000,7:00 PM,4:00 AM,,,,,X,X,X,X,X,X,,
+Migratory Locust,,Ground,600,8:00 AM,7:00 PM,,,,,,,,X,X,X,X,
+Earth-boring Dung Beetle,,Ground,300,12:00 AM,11:59 PM,,,,,,,X,X,X,,,
+Long Locust,,Ground,200,8:00 AM,7:00 PM,,,,X,X,X,X,X,X,X,X,
+Rice Grasshopper,,Ground,160,8:00 AM,7:00 PM,,,,,,,,X,X,X,X,
+Grasshopper,,Ground,160,8:00 AM,5:00 PM,,,,,,,X,X,X,,,
+Cricket,,Ground,130,5:00 PM,8:00 AM,,,,,,,,,X,X,X,
+Walking Leaf,,Near trees,600,12:00 AM,11:59 PM,,,,,,,X,X,,,,
+Flea,,On villagers,70,12:00 AM,11:59 PM,,,,X,X,X,X,X,X,X,X,
+Golden Stag,,Palm tree,12000,5:00 PM,8:00 AM,,,,,,,X,X,,,,
+Giraffe Stag,,Palm tree,12000,5:00 PM,8:00 AM,,,,,,,X,X,,,,
+Horned Hercules,,Palm tree,12000,5:00 PM,8:00 AM,,,,,,,X,X,,,,
+Cyclommatus Stag,,Palm tree,8000,5:00 PM,8:00 AM,,,,,,,X,X,,,,
+Horned Atlas,,Palm tree,8000,5:00 PM,8:00 AM,,,,,,,X,X,,,,
+Horned Elephant,,Palm tree,8000,5:00 PM,8:00 AM,,,,,,,X,X,,,,
+Blue Weevil Beetle,,Palm tree,800,12:00 AM,11:59 PM,,,,,,,X,X,,,,
+Giant Water Bug,,Pond,2000,7:00 PM,8:00 AM,,,,X,X,X,X,X,X,,,
+Diving Beetle,,Pond,800,8:00 AM,7:00 PM,,,,,X,X,X,X,X,,,
+Pondskater,,Pond,130,8:00 AM,7:00 PM,,,,,X,X,X,X,X,,,
+Giant Water Bug,,River,2000,7:00 PM,8:00 AM,,,,X,X,X,X,X,X,,,
+Diving Beetle,,River,800,8:00 AM,7:00 PM,,,,,x,X,X,X,X,,,
+Walking Stick,,Shaken tree,600,4:00 AM,8:00 AM,,,,,,,X,X,X,X,X,
+Walking Stick,,Shaken tree,600,5:00 PM,7:00 PM,,,,,,,X,X,X,X,X,
+Dung Beetle,,Snowball,3000,12:00 AM,11:59 PM,X,X,,,,,,,,,,X
+Rosalia Batesi Beetle,,Stump,3000,12:00 AM,11:59 PM,,,,,X,X,X,X,X,,,
+Violin Beetle,,Stump,450,12:00 AM,11:59 PM,,,,,X,X,,,X,X,X,
+Scarab Beetle,,Tree,10000,11:00 PM,8:00 AM,,,,,,,X,X,,,,
+Giant Stag,,Tree,10000,11:00 PM,8:00 AM,,,,,,,X,X,,,,
+Rainbow Stag,,Tree,6000,7:00 PM,8:00 AM,,,,,,,X,X,X,,,
+Atlas Moth,,Tree,3000,7:00 PM,4:00 AM,,,,X,X,X,X,X,X,,,
+Jewel Beetle,,Tree,2400,12:00 AM,11:59 PM,,,,X,X,X,X,X,,,,
+Saw Stag,,Tree,2000,12:00 AM,11:59 PM,,,,,,,X,X,,,,
+Horned Dynastid,,Tree,1350,5:00 PM,8:00 AM,,,,,,,X,X,,,,
+Miyama Stag,,Tree,1000,12:00 AM,11:59 PM,,,,,,,X,X,,,,
+Evening Cicada,,Tree,550,4:00 AM,8:00 AM,,,,,,,X,X,,,,
+Evening Cicada,,Tree,550,4:00 PM,7:00 PM,,,,,,,X,X,,,,
+Giant Cicada,,Tree,500,8:00 AM,5:00 PM,,,,,,,X,X,,,,
+Walker Cicada,,Tree,400,8:00 AM,5:00 PM,,,,,,,,X,X,,,
+Robust Cicada,,Tree,300,8:00 AM,5:00 PM,,,,,,,X,X,,,,
+Brown Cicada,,Tree,250,8:00 AM,5:00 PM,,,,,,,X,X,,,,
+Drone Beetle,,Tree,200,12:00 AM,11:59 PM,,,,,,X,X,X,,,,
+Cicada Shell,,Tree,10,12:00 AM,11:59 PM,,,,,,,X,X,,,,
