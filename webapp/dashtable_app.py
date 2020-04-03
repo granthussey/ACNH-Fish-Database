@@ -3,50 +3,72 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import dash_table
+from dash.exceptions import PreventUpdate
 
 import pandas as pd
 import numpy as np
 
-# Set stylesheet and initialize app
-
+# Import external stylesheet from internet
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
+
+# Initialize app with external stylesheet
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-# print(external_stylesheets)
 
-# app = dash.Dash(__name__)
-
-# Read in fish and bugs csv
-# df = pd.read_csv('https://plotly.github.io/datasets/country_indicators.csv')
-
+# Read in dataframe to manipulate
 fish = pd.read_pickle("/Users/granthussey/github/ACNL/data/acnl_fish.pkl")
 # bugs = pd.read_pickle('/Users/granthussey/github/ACNL/data/acnl_bug.pkl')
 
+# Initialize global variables we'll constantly reuse
 available_fish = fish[fish.columns[0]].unique()
-# available_bugs =
-available_months = fish.loc[:, "All":"December"].columns.unique()
-
-
-# testing_df = pd.DataFrame({"gay": [1, 2, 5, 2], "straight": [2134, 213, 12, 2]})
+available_months = fish.loc[:, "January":"December"].columns.unique().tolist()
 
 
 def df_cols_to_dashtable_cols(df):
+    """Formats dataframe columns in format that dash_tables can accept"""
+
     return [{"name": i, "id": i} for i in df.columns]
 
 
-def df_cols_to_dropdown_options(iterable):
-    return [{"label": i, "value": i} for i in iterable]
+def iteratable_to_dropdown_options(iterable):
+    """Formats an iteratable (such as a list) 
+    in a format that dcc.dropdown can accept for  'option' parameter"""
+
+    return [{"label": each, "value": each} for each in iterable]
 
 
-def generate_table(dataframe, max_rows=100):
+def dict_to_dropdown_options(dic):
+    """Formats a dictionary (such as a list) 
+    in a format that dcc.dropdown can accept for  'option' parameter.
+    
+    This is very important if you want the label different from the value.
+
+    dic's KEY will become the LABEL (what you see in dropdown)
+    dic's VALUE will become the VALUE (what gets propogated thru callbacks)
+    """
+
+    return [{"label": key, "value": dic[key]} for key in dic]
+
+
+def generate_table(df, max_rows=100):
+
+    """Creates an html table for Html.table component
+    
+    Args:
+        df (dataframe)
+        max_rows (int, optional): The size of the table that will be displayed. 
+        Defaults to 100.
+    
+    Returns:
+        Html.table format
+    """
+
     return html.Table(
         children=[
-            html.Thead(html.Tr([html.Th(col) for col in dataframe.columns])),
+            html.Thead(html.Tr([html.Th(col) for col in df.columns])),
             html.Tbody(
                 [
-                    html.Tr(
-                        [html.Td(dataframe.iloc[i][col]) for col in dataframe.columns]
-                    )
-                    for i in range(min(len(dataframe), max_rows))
+                    html.Tr([html.Td(df.iloc[i][col]) for col in df.columns])
+                    for i in range(min(len(df), max_rows))
                 ]
             ),
         ]
@@ -54,7 +76,16 @@ def generate_table(dataframe, max_rows=100):
 
 
 def filter_backend_table(backend_table):
+    """Removes the 'metadata' within the backend table (such as T/F values for months)
+    
+    Args:
+        backend_table (dataframe): Dataframe containing fish/bug data that has T/F columns, 
+    
+    Returns:
+        dataframe: the pretty-fied dataframe
+    """
 
+    # Bug doesn't have "Shadow size" column
     if backend_table.columns[0] == "Bug":
         df = backend_table.filter(
             items=[
@@ -66,6 +97,7 @@ def filter_backend_table(backend_table):
             ]
         )
 
+    # Fish does have "Shadow size" column
     elif backend_table.columns[0] == "Fish":
         df = backend_table.filter(
             items=[
@@ -96,12 +128,13 @@ def filter_given_months(backend_table, months):
         # If user inputs a single month
         if isinstance(months, str):
             selected = backend_table[months]
+
             return presentable_df.loc[selected]
 
         # If user inputs more than one month
         elif isinstance(months, list):
 
-            # initialize an all-true vector to use later
+            # "AND" an all-true vector by each T/F column
             selected = pd.Series([True] * len(presentable_df))
             for each_month in months:
                 selected = selected & backend_table[each_month]
@@ -117,78 +150,155 @@ def filter_given_months(backend_table, months):
         pass
 
 
-def filter_given_fish(backend_table, selected_fish):
+# def filter_given_fish(backend_table, selected_fish):
 
-    # remove columns from backend_table that we wont want to show
-    presentable_df = filter_backend_table(backend_table)
+#     # remove columns from backend_table that we wont want to show
+#     presentable_df = filter_backend_table(backend_table)
 
-    # print('This is the length of presentable_df ' + str(len(presentable_df)))
+#     # print('This is the length of presentable_df ' + str(len(presentable_df)))
 
-    try:
-        # If user inputs a single month
-        if isinstance(selected_fish, str):
-            selected = backend_table["Fish"] == selected_fish
-            return presentable_df.loc[selected]
+#     try:
+#         # If user inputs a single month
+#         if isinstance(selected_fish, str):
+#             selected = backend_table["Fish"] == selected_fish
+#             return presentable_df.loc[selected]
 
-        # If user inputs more than one month
-        elif isinstance(selected_fish, list):
+#         # If user inputs more than one month
+#         elif isinstance(selected_fish, list):
 
-            # initialize an all-true vector to use later
-            selected = pd.Series([True] * len(presentable_df))
+#             # initialize an all-true vector to use later
+#             selected = pd.Series([True] * len(presentable_df))
 
-            for each_fish in selected_fish:
-                selected = selected & backend_table["Fish"] == selected_fish
+#             for each_fish in selected_fish:
+#                 selected = selected & backend_table["Fish"] == selected_fish
 
-            return presentable_df.loc[selected]
+#             return presentable_df.loc[selected]
 
-        # If empty string (user deleted everything from Dropdown)
-        elif not selected_fish:
-            pass
+#         # If empty string (user deleted everything from Dropdown)
+#         elif not selected_fish:
+#             pass
 
-    except Exception:
-        print("There was an exception in filter_given_fish() function")
-        pass
+#     except Exception:
+#         print("There was an exception in filter_given_fish() function")
+#         pass
 
 
 testing_df = filter_backend_table(fish)
 
 app.layout = html.Div(
     [
-        # Initialize the filters top two columns
+        # THIS IS EVERYTHING ABOVE THE DASH TABLE
         html.Div(
             children=[
-                html.H3(children="The Fish Database"),
+                # TITLE
+                html.H3(
+                    id="title",
+                    children=html.Div(id="testing", children="The Fish Database"),
+                ),
+                # DESCRIPTION
                 html.Div(
                     children=[
                         """
-                Welcome to the premier fish database.
-                Choose from the drop downs below to filter the table below.
-                """
+                        Welcome to the premier fish database.
+                        Choose from the drop downs below to filter the table below.
+                        """
                     ],
                     style={"padding": "10px 5px"},
                 ),
+                # CONTAINER FOR fish-dropdown AND month-dropdown
                 html.Div(
                     children=[
-                        dcc.Dropdown(
-                            id="fish-dropdown",
-                            options=df_cols_to_dropdown_options(available_fish),
-                            placeholder="Filter by individual fish",
-                            multi=True,
-                        )
-                    ],
-                    style={"width": "49%", "display": "inline-block"},
+                        # DROPDOWN FISH NAME
+                        html.Div(
+                            children=[
+                                "Filter by fish name",
+                                dcc.Dropdown(
+                                    id="fish-dropdown",
+                                    options=iteratable_to_dropdown_options(
+                                        available_fish
+                                    ),
+                                    placeholder="Choose fish...",
+                                    multi=True,
+                                ),
+                            ],
+                            style={"width": "49%", "display": "inline-block"},
+                        ),
+                        # DROPDOWN ACTIVE MONTH
+                        html.Div(
+                            children=[
+                                "Filter by month fish is active",
+                                dcc.Dropdown(
+                                    id="month-dropdown",
+                                    options=iteratable_to_dropdown_options(
+                                        ["All"] + available_months
+                                    ),
+                                    placeholder="Choose month(s)...",
+                                    multi=True,
+                                ),
+                            ],
+                            style={
+                                "width": "49%",
+                                "float": "right",
+                                "display": "inline-block",
+                            },
+                        ),
+                    ]
                 ),
+                # CONTAINER FOR month-leaving-dropdown AND month-arriving-dropdown
                 html.Div(
                     children=[
-                        dcc.Dropdown(
-                            id="month-dropdown",
-                            options=df_cols_to_dropdown_options(available_months),
-                            # value="",
-                            placeholder="Filter by month fish is active",
-                            multi=True,
+                        # DROPDOWN LEAVING FISH
+                        html.Div(
+                            children=[
+                                "Find fish leaving your island",
+                                dcc.Dropdown(
+                                    id="month-leaving-dropdown",
+                                    options=dict_to_dropdown_options(
+                                        dict(
+                                            zip(
+                                                list(
+                                                    "Leaving after {}".format(month)
+                                                    for month in available_months
+                                                ),
+                                                available_months,
+                                            )
+                                        )
+                                    ),
+                                    placeholder="Choose month...",
+                                    multi=False,
+                                ),
+                            ],
+                            style={"width": "49%", "display": "inline-block"},
+                        ),
+                        # DROPDOWN ARRIVING FISH
+                        html.Div(
+                            children=[
+                                "Find fish coming to your island ",
+                                dcc.Dropdown(
+                                    id="month-arriving-dropdown",
+                                    options=dict_to_dropdown_options(
+                                        dict(
+                                            zip(
+                                                list(
+                                                    "Arriving in {}".format(month)
+                                                    for month in available_months
+                                                ),
+                                                available_months,
+                                            )
+                                        )
+                                    ),
+                                    placeholder="Choose month...",
+                                    multi=False,
+                                ),
+                            ],
+                            style={
+                                "width": "49%",
+                                "float": "right",
+                                "display": "inline-block",
+                            },
                         ),
                     ],
-                    style={"width": "49%", "float": "right", "display": "inline-block"},
+                    style={"padding": "10px 0px"},
                 ),
             ],
             style={
@@ -205,6 +315,7 @@ app.layout = html.Div(
         # 6. style_header
         # 7. style_cell_conditional
         # 8. style_cell
+        # THIS IS THE DASH TABLE
         html.Div(
             children=dash_table.DataTable(
                 id="doot",
@@ -220,7 +331,7 @@ app.layout = html.Div(
                         "backgroundColor": "rgb(248, 248, 248)",
                     }
                 ],
-                style_data={"font": "Arial"}
+                style_data={"font": "Arial"},
                 # style_data={"border": "1px solid black"}
                 # style_cell_conditional=[
                 #     {"if": {"column_id": c}, "textAlign": "left"}
@@ -259,34 +370,50 @@ def return_original_fish_table():
 
 @app.callback(
     [Output("doot", "data"), Output("doot", "columns")],
-    [Input("month-dropdown", "value")],
+    [
+        Input("month-dropdown", "value"),
+        Input("fish-dropdown", "value"),
+        Input("month-arriving-dropdown", "value"),
+        Input("month-leaving-dropdown", "value"),
+    ],
 )
-def update_table(months_to_filter):
+def update_table(
+    month_dropdown_value, fish_dropdown_value, month_arriving_value, month_leaving_value
+):
+
+    print()
+    print(month_dropdown_value)
+    print(fish_dropdown_value)
+    print(month_arriving_value)
+    print(month_leaving_value)
+    print()
 
     # logic for the beginning where you have NoneType for "value"
-    if months_to_filter is None:
-        print()
-        print(months_to_filter)
-        print(type(months_to_filter))
-        print()
+    if month_dropdown_value is None:
+        # print()
+        # print(month_dropdown_value)
+        # print(type(month_dropdown_value))
+        # print()
         return return_original_fish_table()
 
     # now, make sure that it is a list
-    elif isinstance(months_to_filter, str) or isinstance(months_to_filter, list):
+    elif isinstance(month_dropdown_value, str) or isinstance(
+        month_dropdown_value, list
+    ):
 
-        if len(months_to_filter) == 0:
-            print()
-            print(months_to_filter)
-            print(type(months_to_filter))
-            print()
+        if len(month_dropdown_value) == 0:
+            # print()
+            # print(month_dropdown_value)
+            # print(type(month_dropdown_value))
+            # print()
             return return_original_fish_table()
 
         else:
-            print()
-            print(months_to_filter)
-            print(type(months_to_filter))
-            print()
-            filtered_df = filter_given_months(fish, months_to_filter)
+            # print()
+            # print(month_dropdown_value)
+            # print(type(month_dropdown_value))
+            # print()
+            filtered_df = filter_given_months(fish, month_dropdown_value)
             return (
                 filtered_df.to_dict("records"),
                 df_cols_to_dashtable_cols(filtered_df),
@@ -294,39 +421,52 @@ def update_table(months_to_filter):
 
 
 # @app.callback(
-#     [Output("doot", "data"), Output("doot", "columns")],
-#     [Input("fish-dropdown", "value")],
+#     [Output("month-dropdown", "value"), Output("fish-dropdown", "value")],
+#     [
+#         Input("month-arriving-dropdown", "value"),
+#         Input("month-leaving-dropdown", "value"),
+#     ],
 # )
-# def update_table_by_fish(fish_to_filter):
+# def erase_fish_and_month(month_arriving_value, month_leaving_value):
+#     """If either inputs are not [] nor None, then erase the value user input into
+#     month-dropdown and fish-dropdown"""
 
-#     # logic for the beginning where you have NoneType for "value"
-#     if fish_to_filter is None:
-#         print()
-#         print(fish_to_filter)
-#         print(type(fish_to_filter))
-#         print()
-#         return return_original_fish_table()
+#     if not month_arriving_value or not month_leaving_value:
+#         return (None, None)
 
-#     # now, make sure that it is a list
-#     elif isinstance(fish_to_filter, str) or isinstance(fish_to_filter, list):
 
-#         if len(fish_to_filter) == 0:
-#             print()
-#             print(fish_to_filter)
-#             print(type(fish_to_filter))
-#             print()
-#             return return_original_fish_table()
+""""
 
-#         else:
-#             print()
-#             print(fish_to_filter)
-#             print(type(fish_to_filter))
-#             print()
-#             filtered_df = filter_given_months(fish, fish_to_filter)
-#             return (
-#                 filtered_df.to_dict("records"),
-#                 df_cols_to_dashtable_cols(filtered_df),
-#             )
+EITHER I will just "disable" and not clear the values, cotinue working on this
+GoOLE: Same output and input: month-dropdown.value
+"""
+
+
+@app.callback(
+    [
+        Output("month-dropdown", "disabled"),
+        Output("fish-dropdown", "disabled"),
+        Output("month-dropdown", "value"),
+        Output("fish-dropdown", "value"),
+    ],
+    [
+        Input("month-arriving-dropdown", "value"),
+        Input("month-leaving-dropdown", "value"),
+    ],
+)
+def erase_fish_and_month(
+    month_arriving_value, month_leaving_value,
+):
+    """If either inputs are not [] nor None, then erase the value user input into
+    month-dropdown and fish-dropdown"""
+
+    if isinstance(month_arriving_value, str) or isinstance(month_leaving_value, str):
+        return (True, True, [], [])
+
+    if not month_arriving_value and not month_leaving_value:
+        return (False, False, [], [])
+    else:
+        raise PreventUpdate
 
 
 if __name__ == "__main__":
