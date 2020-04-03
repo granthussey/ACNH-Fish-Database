@@ -113,44 +113,107 @@ def filter_backend_table(backend_table):
     return df
 
 
-def filter_given_months(backend_table, months):
+def get_fish_logic(df, selected_fish):
 
-    """
-    This needs to take either a list or a str and deal with it properly.
-    """
+    # if [] or None, return all false
+    if not selected_fish:
+        print("trigger f")
+        return [False] * len(df)
 
-    # remove columns from backend_table that we wont want to show
-    presentable_df = filter_backend_table(backend_table)
+    # if str or list, iterate
+    else:
 
-    # print('This is the length of presentable_df ' + str(len(presentable_df)))
+        if isinstance(selected_fish, str):
+            print("pd_vec f")
+            print((pd_vector))
+            print()
+            pd_vector = df["Fish"] == selected_fish
+            return pd_vector.tolist()  # single logical vector
 
-    try:
-        # If user inputs a single month
-        if isinstance(months, str):
-            selected = backend_table[months]
-
-            return presentable_df.loc[selected]
-
-        # If user inputs more than one month
-        elif isinstance(months, list):
-
+        elif isinstance(selected_fish, list):
             # "AND" an all-true vector by each T/F column
-            selected = pd.Series([True] * len(presentable_df))
-            for each_month in months:
-                selected = selected & backend_table[each_month]
+            selected = pd.Series([True] * len(df))
+            for each_fish in selected_fish:
+                cur_vector = df["Fish"] == each_fish
+                selected = selected & cur_vector
 
-            return presentable_df.loc[selected]
+            print("selected f")
+            print((selected))
+            print()
+            return selected.tolist()
 
-        # If empty string (user deleted everything from Dropdown)
-        elif not months:
-            pass
-
-    except Exception:
-        print("There was an exception in filter_given_months() function")
-        pass
+        else:
+            print("there was an error in get_fish_logic")
+            # return all false for compatability
+            return [False] * len(df)
 
 
-# def filter_given_fish(backend_table, selected_fish):
+def get_month_logic(df, selected_months):
+
+    print(df)
+
+    # if [] or None, return all false
+    if not selected_months:
+        print("trigger mo")
+        return [False] * len(df)
+
+    # if str or list, iterate
+    else:
+
+        if isinstance(selected_months, str):
+            print(len(df))
+            pd_vector = df[selected_months]
+
+            print("pd_vec mo")
+            print(pd_vector)
+            print(len(pd_vector))
+            print(type(pd_vector))
+            print()
+
+            test = pd_vector.tolist()
+
+            print("pd_vec  test")
+            print(test)
+            print(len(test))
+            print(type(test))
+            print()
+            return test  # single logical vector
+
+        elif isinstance(selected_months, list):
+
+            print(len(df))
+            # "AND" an all-true vector by each T/F column
+            selected = pd.Series([True] * len(df))
+            for each_month in selected_months:
+                selected = selected & df[each_month]
+
+            print("selected mo")
+            print(selected)
+            print(len(selected))
+            print(type(selected))
+            print()
+
+            test = selected.tolist()
+
+            print("selected mo test")
+            print(test)
+            print(len(test))
+            print(type(test))
+            print()
+
+            return test
+
+        else:
+            print("there was an error in get_month_logic")
+            # return all false for compatability
+            return [False] * len(df)
+
+
+# def filter_given_months(backend_table, months):
+
+#     """
+#     This needs to take either a list or a str and deal with it properly.
+#     """
 
 #     # remove columns from backend_table that we wont want to show
 #     presentable_df = filter_backend_table(backend_table)
@@ -158,32 +221,30 @@ def filter_given_months(backend_table, months):
 #     # print('This is the length of presentable_df ' + str(len(presentable_df)))
 
 #     try:
+
 #         # If user inputs a single month
-#         if isinstance(selected_fish, str):
-#             selected = backend_table["Fish"] == selected_fish
+#         if isinstance(months, str):
+#             selected = backend_table[months]
+
 #             return presentable_df.loc[selected]
 
 #         # If user inputs more than one month
-#         elif isinstance(selected_fish, list):
+#         elif isinstance(months, list):
 
-#             # initialize an all-true vector to use later
+#             # "AND" an all-true vector by each T/F column
 #             selected = pd.Series([True] * len(presentable_df))
-
-#             for each_fish in selected_fish:
-#                 selected = selected & backend_table["Fish"] == selected_fish
+#             for each_month in months:
+#                 selected = selected & backend_table[each_month]
 
 #             return presentable_df.loc[selected]
 
 #         # If empty string (user deleted everything from Dropdown)
-#         elif not selected_fish:
+#         elif not months:
 #             pass
 
 #     except Exception:
-#         print("There was an exception in filter_given_fish() function")
+#         print("There was an exception in filter_given_months() function")
 #         pass
-
-
-testing_df = filter_backend_table(fish)
 
 app.layout = html.Div(
     [
@@ -266,6 +327,7 @@ app.layout = html.Div(
                                     ),
                                     placeholder="Choose month...",
                                     multi=False,
+                                    disabled=False,
                                 ),
                             ],
                             style={"width": "49%", "display": "inline-block"},
@@ -289,6 +351,7 @@ app.layout = html.Div(
                                     ),
                                     placeholder="Choose month...",
                                     multi=False,
+                                    disabled=False,
                                 ),
                             ],
                             style={
@@ -318,9 +381,9 @@ app.layout = html.Div(
         # THIS IS THE DASH TABLE
         html.Div(
             children=dash_table.DataTable(
-                id="doot",
-                columns=df_cols_to_dashtable_cols(testing_df),
-                data=testing_df.to_dict("records"),
+                id="fish-df",
+                columns=df_cols_to_dashtable_cols(filter_backend_table(fish)),
+                data=filter_backend_table(fish).to_dict("records"),
                 # Remove the certical lines
                 style_as_list_view=True,
                 # Make the columns
@@ -332,6 +395,8 @@ app.layout = html.Div(
                     }
                 ],
                 style_data={"font": "Arial"},
+                sort_action="native",
+                # filter_action="native",
                 # style_data={"border": "1px solid black"}
                 # style_cell_conditional=[
                 #     {"if": {"column_id": c}, "textAlign": "left"}
@@ -369,7 +434,7 @@ def return_original_fish_table():
 
 
 @app.callback(
-    [Output("doot", "data"), Output("doot", "columns")],
+    [Output("fish-df", "data"), Output("fish-df", "columns")],
     [
         Input("month-dropdown", "value"),
         Input("fish-dropdown", "value"),
@@ -388,58 +453,55 @@ def update_table(
     print(month_leaving_value)
     print()
 
-    # logic for the beginning where you have NoneType for "value"
-    if month_dropdown_value is None:
-        # print()
-        # print(month_dropdown_value)
-        # print(type(month_dropdown_value))
-        # print()
-        return return_original_fish_table()
+    """
+    Logical Overview
+    1) Check to see if user selected options for "month-arriving-dropdown" or "month-leaving-dropdown"
+        a. Use those values to filter fish
+    
+    2) Otherwise, process "selected" vectors for month-dropdown and fish-dropdown
+        a. OR those vectors together!
+    """
 
-    # now, make sure that it is a list
-    elif isinstance(month_dropdown_value, str) or isinstance(
-        month_dropdown_value, list
-    ):
+    if isinstance(month_arriving_value, str):
+        raise PreventUpdate  # placeholder
 
-        if len(month_dropdown_value) == 0:
-            # print()
-            # print(month_dropdown_value)
-            # print(type(month_dropdown_value))
-            # print()
-            return return_original_fish_table()
+    elif isinstance(month_leaving_value, str):
+        raise PreventUpdate  # placeholder
 
+    else:
+
+        # Don't update if [] or None
+        if not month_dropdown_value and not fish_dropdown_value:
+            raise PreventUpdate
+
+        # Update otherwise
         else:
-            # print()
-            # print(month_dropdown_value)
-            # print(type(month_dropdown_value))
-            # print()
-            filtered_df = filter_given_months(fish, month_dropdown_value)
+            # you're going to get a list of str, str, or [] or None for one of the dropdowns,
+            # so now I need to handle that.
+
+            # Get months filter if it exists
+            log1 = get_month_logic(fish, month_dropdown_value)
+            print("month vector")
+            print(len(log1))
+            print()
+
+            # Get fish filter if that exists
+            log2 = get_fish_logic(fish, fish_dropdown_value)
+            print("fish vector")
+            print((log2))
+            print()
+
+            selected = log1 or log2
+
+            print(selected)
+
+            presentable_df = filter_backend_table(fish)
+
+            print("the length of presentable df is " + str(len(presentable_df)))
             return (
-                filtered_df.to_dict("records"),
-                df_cols_to_dashtable_cols(filtered_df),
+                presentable_df.loc[selected].to_dict("records"),
+                df_cols_to_dashtable_cols(presentable_df.loc[selected]),
             )
-
-
-# @app.callback(
-#     [Output("month-dropdown", "value"), Output("fish-dropdown", "value")],
-#     [
-#         Input("month-arriving-dropdown", "value"),
-#         Input("month-leaving-dropdown", "value"),
-#     ],
-# )
-# def erase_fish_and_month(month_arriving_value, month_leaving_value):
-#     """If either inputs are not [] nor None, then erase the value user input into
-#     month-dropdown and fish-dropdown"""
-
-#     if not month_arriving_value or not month_leaving_value:
-#         return (None, None)
-
-
-""""
-
-EITHER I will just "disable" and not clear the values, cotinue working on this
-GoOLE: Same output and input: month-dropdown.value
-"""
 
 
 @app.callback(
@@ -448,6 +510,8 @@ GoOLE: Same output and input: month-dropdown.value
         Output("fish-dropdown", "disabled"),
         Output("month-dropdown", "value"),
         Output("fish-dropdown", "value"),
+        Output("month-arriving-dropdown", "disabled"),
+        Output("month-leaving-dropdown", "disabled"),
     ],
     [
         Input("month-arriving-dropdown", "value"),
@@ -460,11 +524,18 @@ def erase_fish_and_month(
     """If either inputs are not [] nor None, then erase the value user input into
     month-dropdown and fish-dropdown"""
 
-    if isinstance(month_arriving_value, str) or isinstance(month_leaving_value, str):
-        return (True, True, [], [])
+    # Triggers when someone puts data in these fields
+    if isinstance(month_arriving_value, str):
+        return (True, True, [], [], False, True)
 
-    if not month_arriving_value and not month_leaving_value:
-        return (False, False, [], [])
+    elif isinstance(month_leaving_value, str):
+        return (True, True, [], [], True, False)
+
+    # Triggers when someone deletes values from these fields
+    elif not month_arriving_value and not month_leaving_value:
+        return (False, False, [], [], False, False)
+
+    # Don't update if these fields are empty
     else:
         raise PreventUpdate
 
