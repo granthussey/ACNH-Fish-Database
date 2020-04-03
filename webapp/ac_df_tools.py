@@ -150,7 +150,31 @@ def get_species_leaving_logic(selected_month, AVAIL_MONTHS, BACKEND_DF):
     return cur_vector & ~next_vector
 
 
-# This will need to be changed before deployment
 # to read in from a public Google Sheet
 def get_backend_fish_df():
-    return pd.read_pickle("/Users/granthussey/github/ACNH/data/acnl_fish.pkl")
+    return download_creature_data("fish")
+
+
+# def get_local_backend_fish_df():
+# remember this?
+
+
+def download_creature_data(creature_type):
+    """creature_type is the worksheet name in the Google Sheet, either fish or bugs"""
+    google_sheet_id = "1YXGasmPBqnTw1B5gIfWA-ci7NiO-EdtS-PsxjNrYUls"
+    #     worksheet_name = creature_type
+    URL = "https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}".format(
+        google_sheet_id, creature_type
+    )
+
+    df = pd.read_csv(URL)
+    df = df.drop(
+        columns=[
+            "Unnamed: 0",
+            "Unnamed: 22",
+            "Unnamed: 23",
+            "Unnamed: 24",
+            "Unnamed: 25",
+        ]
+    )
+    return df
