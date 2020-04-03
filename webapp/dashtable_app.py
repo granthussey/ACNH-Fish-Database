@@ -192,6 +192,12 @@ app.layout = html.Div(
                     html.A("GitHub", href="https://www.github.com/granthussey"),
                     ". Code by Grant Hussey. Visit my website: ",
                     html.A("www.granthussey.com", href="https://www.granthussey.com"),
+                    html.Br(),
+                    "Original dataset taken from ",
+                    html.A(
+                        "this Google Sheet.",
+                        href="https://docs.google.com/spreadsheets/d/1ooePgv7AmENQsoxPuvChIa3S4CnZlUgwMLHXTjKXf-4/htmlview",
+                    ),
                 ],
                 style={
                     "justify": "center",
