@@ -111,6 +111,45 @@ def get_month_logic(backend_df, selected_months):
             return [False] * len(backend_df)
 
 
+def get_species_arriving_logic(selected_month, AVAIL_MONTHS, BACKEND_DF):
+    """"can be used for bugs & fish I think"""
+
+    # Explaination
+    # Get "Arriving in March" -> GIVES YOU "MARCH" value (3)
+    # But fish arriving in march (3) are fish NOT in feb (2)
+    # So I need fish that are in APRIL but NOT in March
+
+    # find index of selected month
+    cur_month = AVAIL_MONTHS.index(selected_month)
+
+    # wrap around if December
+    prev_month = cur_month - 1
+
+    cur_vector = BACKEND_DF[AVAIL_MONTHS[cur_month]]
+    prev_vector = BACKEND_DF[AVAIL_MONTHS[prev_month]]
+
+    # creatures NOT in this month but DEFINITELY next month
+    return cur_vector & ~prev_vector
+
+
+def get_species_leaving_logic(selected_month, AVAIL_MONTHS, BACKEND_DF):
+    """"can be used for bugs & fish I think"""
+    # find index of selected month
+    cur_month = AVAIL_MONTHS.index(selected_month)
+
+    # wrap around if December
+    if cur_month == 11:
+        next_month = 0
+    else:
+        next_month = cur_month + 1
+
+    cur_vector = BACKEND_DF[AVAIL_MONTHS[cur_month]]
+    next_vector = BACKEND_DF[AVAIL_MONTHS[next_month]]
+
+    # creatures NOT in this month but DEFINITELY next month
+    return cur_vector & ~next_vector
+
+
 # This will need to be changed before deployment
 # to read in from a public Google Sheet
 def get_backend_fish_df():

@@ -156,3 +156,4 @@ dmypy.json
 notebooks/*
 settings.json
 *.ipynb
+*.csv

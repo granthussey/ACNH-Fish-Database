@@ -183,6 +183,24 @@ app.layout = html.Div(
                 "marginLeft": 25,
             },
         ),
+        # THIS IS A FOOTER
+        html.Div(
+            children=html.Footer(
+                id="footer",
+                children=[
+                    "Come see this project on ",
+                    html.A("GitHub", href="https://www.github.com/granthussey"),
+                    ". Code by Grant Hussey. Visit my website: ",
+                    html.A("www.granthussey.com", href="https://www.granthussey.com"),
+                ],
+                style={
+                    "justify": "center",
+                    "background-color": "#D3D3D3",
+                    "padding": "5px",
+                },
+            ),
+            style={"text-align": "center"},
+        ),
     ]
 )
 
@@ -200,12 +218,12 @@ def update_table(
     month_dropdown_value, fish_dropdown_value, month_arriving_value, month_leaving_value
 ):
 
-    print()
-    print(month_dropdown_value)
-    print(fish_dropdown_value)
-    print(month_arriving_value)
-    print(month_leaving_value)
-    print()
+    # print()
+    # print(month_dropdown_value)
+    # print(fish_dropdown_value)
+    # print(month_arriving_value)
+    # print(month_leaving_value)
+    # print()
 
     """
     Logical Overview
@@ -221,10 +239,22 @@ def update_table(
     # then apply them, should be relatively easy.
 
     if isinstance(month_arriving_value, str):
-        raise PreventUpdate  # placeholder
+        selected = ac_tls.get_species_arriving_logic(
+            month_arriving_value, AVAIL_MONTHS, BACKEND_FISH_DF
+        )
+        return (
+            ENDUSER_FISH_DF.loc[selected].to_dict("records"),
+            tls.df_cols_to_dashtable_cols(ENDUSER_FISH_DF.loc[selected]),
+        )
 
     elif isinstance(month_leaving_value, str):
-        raise PreventUpdate  # placeholder
+        selected = ac_tls.get_species_leaving_logic(
+            month_leaving_value, AVAIL_MONTHS, BACKEND_FISH_DF
+        )
+        return (
+            ENDUSER_FISH_DF.loc[selected].to_dict("records"),
+            tls.df_cols_to_dashtable_cols(ENDUSER_FISH_DF.loc[selected]),
+        )
 
     else:
 
@@ -237,21 +267,12 @@ def update_table(
 
             # Get months filter if it exists
             log1 = ac_tls.get_month_logic(BACKEND_FISH_DF, month_dropdown_value)
-            print("month vector")
-            print((log1))
-            print()
 
             # Get fish filter if that exists
             log2 = ac_tls.get_fish_logic(BACKEND_FISH_DF, fish_dropdown_value)
-            print("fish vector")
-            print((log2))
-            print()
 
             # or is not element-wise for lists, so use np
             selected = np.logical_or(log1, log2)
-
-            print("full selected")
-            print(selected)
 
             return (
                 ENDUSER_FISH_DF.loc[selected].to_dict("records"),
