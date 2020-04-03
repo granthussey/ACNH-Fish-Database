@@ -155,3 +155,4 @@ dmypy.json
 # Others
 notebooks/*
 settings.json
+*.ipynb
