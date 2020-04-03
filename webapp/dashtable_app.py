@@ -482,7 +482,7 @@ def update_table(
             # Get months filter if it exists
             log1 = get_month_logic(fish, month_dropdown_value)
             print("month vector")
-            print(len(log1))
+            print((log1))
             print()
 
             # Get fish filter if that exists
@@ -491,7 +491,8 @@ def update_table(
             print((log2))
             print()
 
-            selected = log1 or log2
+            """Honetsly i dont know if I know how booleans work lol"""
+            selected = log2 or log1  # THIS IS BROKEN
 
             print(selected)
 
