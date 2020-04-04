@@ -38,6 +38,30 @@ AVAIL_FISH = BACKEND_FISH_DF[BACKEND_FISH_DF.columns[0]].unique()
 AVAIL_MONTHS = BACKEND_FISH_DF.loc[:, "January":"December"].columns.unique().tolist()
 #
 
+#
+# Change the default HTML Index Template
+app.index_string = """
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width">
+        {%metas%}
+        <title>Premium Fish Database</title>
+        {%favicon%}
+        {%css%}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>
+"""
+#
+
 app.layout = html.Div(
     [
         # THIS IS EVERYTHING ABOVE THE DASH TABLE
@@ -326,6 +350,6 @@ def input_controls(
 
 
 if __name__ == "__main__":
-    # app.run_server(debug=True)
-    server = app.server
+    app.run_server(debug=True)
+    # server = app.server
     # app.run_server(debug=True, dev_tools_hot_reload=False)
