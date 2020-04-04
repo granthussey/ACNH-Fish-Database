@@ -157,3 +157,4 @@ notebooks/*
 settings.json
 *.ipynb
 *.csv
+data/
